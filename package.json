@@ -1,0 +1,20 @@
+{
+  "name": "state-of-the-frontend",
+  "version": "0.0.1",
+  "author": "Thomas Jaggi <thomas@responsive.ch>",
+  "type": "module",
+  "main": "index.js",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "node --test test"
+  },
+  "dependencies": {
+    "reveal.js": "^5.0.5"
+  },
+  "devDependencies": {
+    "vite": "^5.2.7"
+  }
+}

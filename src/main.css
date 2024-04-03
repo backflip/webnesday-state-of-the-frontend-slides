@@ -1,0 +1,147 @@
+@import url(./font/Merriweather.css);
+@import url(/node_modules/reveal.js/dist/reveal.css);
+
+body {
+  font-family: "Merriweather", serif;
+  font-size: 1.25em;
+}
+
+/* Overrides */
+.reveal-viewport {
+  line-height: 1.5;
+}
+.reveal .slides {
+  text-align: left;
+}
+
+section:not(:has(section)):has(img) {
+  font-size: 0.75em;
+}
+
+@supports (background-clip: text) {
+  h1,
+  h2,
+  h3 {
+    --custom-gradient-from: #004a9f;
+    --custom-gradient-to: #00bc42;
+
+    background: linear-gradient(
+      to right,
+      var(--custom-gradient-from),
+      var(--custom-gradient-to)
+    );
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    font-weight: 900;
+
+    /* Remove effect if we need strike-through */
+    &:has(del) {
+      -webkit-text-fill-color: black;
+    }
+  }
+
+  h1 {
+    font-size: 5rem;
+    line-height: 1.2;
+  }
+  h2 {
+    font-size: 3rem;
+    line-height: 1.35;
+  }
+  h3 {
+    --custom-gradient-from: #9f2d00;
+    --custom-gradient-to: #d68f00;
+
+    font-size: 2rem;
+  }
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  max-height: 30vh;
+  margin-inline: auto;
+}
+
+code {
+  background-color: #ddd;
+  padding: 0.2em 0.4em;
+  border-radius: 0.2em;
+}
+
+table {
+  border-collapse: collapse;
+}
+th {
+  border-bottom: 1px solid #aaa;
+}
+th,
+td {
+  padding-block: 0.25em;
+  padding-inline-start: 0.5em;
+  padding-inline-end: 1em;
+
+  &:not(:first-child) {
+    border-left: 1px solid #aaa;
+  }
+}
+tr {
+  &:nth-child(even) {
+    background: #eee;
+  }
+}
+
+blockquote {
+  font-style: italic;
+  font-size: 1.2em;
+  opacity: 0.5;
+}
+
+li {
+  margin-block-start: 0.25em;
+}
+
+/* Custom */
+.custom-secondary {
+  &,
+  .reveal &.fragment.visible {
+    opacity: 0.5;
+  }
+}
+
+.custom-columns {
+  display: flex;
+}
+
+.custom-image-small {
+  float: right;
+  max-width: 25vw;
+  margin-inline-start: 1em;
+}
+
+.custom-image-sequence {
+  position: relative;
+
+  * {
+    margin-block: 0;
+
+    &:not(:first-child) {
+      position: absolute;
+      inset: 0;
+    }
+  }
+}
+
+.custom-footnote {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: #fff;
+  padding: 0.2em 0.4em;
+  border-radius: 0.2em;
+
+  section:has(> &) {
+    padding-bottom: 3rem;
+  }
+}
