@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>Slides</title>
+    <script type="module" crossorigin src="./assets/index-0ELLiChm.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Ydk2Zh9f.css">
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <script type="text/template">
+            # Weshalb bauen wir mit immer komplexeren Tools immer schlechtere Webseiten?
+          </script>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              ## Agenda
+
+              - State of the frontend *(Spoiler: 🙄)*
+              - Gründe *(Spoiler: der JavaScript Industrial Complex ist schuld)*
+              - Lösungen *(Spoiler: Plattform, Plattform, Plattform)*
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ## Kontext
+
+              ![Simpsons: Old man yells at cloud](./src/media/old-man-yells-at-cloud.jpeg)
+              <!-- .element class="fragment custom-image-small" -->
+
+              - Thomas Jaggi
+              - Seit gut 20 Jahren als Frontend-Entwickler tätig
+              - Grösstenteils im Agentur-Umfeld
+              - [responsive.ch](https://responsive.ch)
+
+              <aside class="notes">
+                - Spirit animal
+              </aside>
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              ## Was ist eine gute Website?
+
+              Als **User:in**
+              - finde ich rasch die Informationen, welche ich suche (*Welche Pizze werden angeboten?*).
+              - kann ich die gewünschte Aktion ausführen (*Pizza bestellen*).
+              - gehe ich dabei nicht automatisch einen Vertrag mit 2.5 Mrd Data-Brokern ein, welcher ihnen die Rechte an all meinen Daten und jener sämtlicher Personen, die ich jemals getroffen habe, unwiderruflich überträgt. Plus die Hälfte meiner Pizza. <!-- .element: class="fragment custom-secondary" -->
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### Wichtige Faktoren
+
+              1. Sind unsere Webseiten **schnell**?
+              2. Sind unsere Webseiten **bedienbar**?
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Datensatz:* HTTP Archive
+
+              ![Almanac Logo](./src/media/http-archive-web-almanac.png)
+              <!-- .element class="custom-image-small" -->
+
+              - [Web Almanac 2022](https://almanac.httparchive.org) (8.5 Mio Webseiten)
+              - [CrUX Report](https://httparchive.org/reports/chrome-ux-report) (reale Daten von Chrome User:innen)
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### 1. Sind unsere Webseiten schnell?
+
+              Zentrale Frage: **Schnell für wen?**
+
+              - Schweiz:
+                - Hohe Dichte an schnellen Smartphones
+                - Gute 4G/5G-Netzabdeckung
+              - Weltweit:
+                - [Repräsentatives Smartphone](https://infrequently.org/2024/01/performance-inequality-gap-2024/): Samsung Galaxy A51 (< 20% der Performance eines iPhone 15 Pro)
+                - [Repräsentatives Netzwerk](https://infrequently.org/2024/01/performance-inequality-gap-2024/): 7.2Mbps down, 1.4Mbps up (< 10% von 4G)
+
+                <aside class="notes">
+                  - Alex Russell, Microsoft Edge
+                  - Basis für Device: Basierend auf weltweitem Average Selling Price von USD 300
+                  - Basis für Netzwerk: Cloudflare Radar, Grossstädte Weltweit
+                </aside>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Kennzahl:* Core Web Vitals (CWV)
+
+              - Google-Initiative
+              - Metriken für performance-bezogene UX
+              - Ranking Signal
+              - "Real world usage date" aus `Chrome User Experience Report (CrUX)`
+
+              ![Daten aus dem HTTP Archive: Prozentzahl der Seiten, welche Core Web Vitals erfüllen. Stand Ende 2023: 53.2% auf Desktop, 45.5% auf Mobile.](./src/media/cwv-overall.png)
+              <!-- .element class="fragment" -->
+
+              [HTTP Archive CrUX report](https://httparchive.org/reports/chrome-ux-report?start=2023_01_01&end=latest&view=list#cruxPassesCWV)
+              <!-- .element class="custom-footnote" -->
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Core Web Vitals:* Caveat
+
+              Ersatz des Kriteriums `First Input Delay (FID)` durch []`Interaction to Next Paint (INP)`](https://web.dev/articles/inp).
+
+              > Good responsiveness means a page responds quickly to interactions. When a page responds to an interaction, the browser presents visual feedback in the next frame it renders to show that the interaction was successful.
+
+              ![Prozentzahl der Seiten, welche Core Web Vitals erfüllen, wenn FID durch INP ersetzt wird.](./src/media/cwv-inp.png)
+              <!-- .element class="fragment" -->
+
+              [HTTP Archive Web Almanac 2022: INP as a hypothetical CWV metric](https://almanac.httparchive.org/en/2022/performance#inp-as-a-hypothetical-cwv-metric)
+              <!-- .element class="custom-footnote" -->
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Core Web Vitals:* Fazit
+
+              - **Tiefes Niveau**, Tendenz steigend.
+              - Tendenziell **Verschlechterung** durch neue Metrik `INP`:<br>Ende 2023 hätten zwei Drittel der gemessenen Seiten auf Mobile die aktuellen Core Web Vitals nicht erfüllt.
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Einschub:* Kosten
+
+              - Median-Grösse einer Webseite: ~ 2 MB
+
+              <div class="custom-columns">
+
+                ![Anstieg des Medians in den lezten 10 Jahren](./src/media/http-archive-page-weight.png)
+
+                ![Swisscom-Roaming-Angebot: 50 MB für 14.90](./src/media/swisscom-roaming.png)
+                <!-- .element class="fragment" -->
+
+              </div>
+
+              [HTTP Archive Web Almanac 2022: Page Weight](https://almanac.httparchive.org/en/2022/page-weight)
+              <!-- .element class="custom-footnote" -->
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### 2. Sind unsere Webseiten bedienbar?
+
+              *Indikator für den Stellenwert von UX*: Barrierefreiheit
+              - **3/4** der Seiten haben **ungenügenden Farbkontrast**.
+              - **1/4** der Seiten versucht, Zooming auf Mobile zu deaktivieren.
+              - **1/2** der Seiten hat **Bilder ohne Alternativtexte**.
+              - **2/3** der Seiten haben **Formularfelder ohne Labels**.
+
+              [HTTP Archive Web Almanac 2022: Accessibility](https://almanac.httparchive.org/en/2022/accessibility)
+              <!-- .element class="custom-footnote" -->
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              ## *Kernproblem:* Unsere Best Practices sind Worst Practices
+
+              - Verbreitete Frontend-Frameworks legen den Fokus auf **Developer Experience (DX) statt UX**
+              - Sie interessieren sich nicht für langsame Geräte und/oder langsame Netzwerke
+              - Verbreitete Libraries/Komponenten sind unnötig gross und nur bedingt barrierefrei
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Core Web Vitals*: Faktor Technologie
+
+              <div class="custom-image-sequence">
+
+                ![Core Web Vitals Technology Report 01: Prozentzahl der Seiten mit gutem INP in Abhängigkeit von der Technologie: Next.js weit abfallend](./src/media/cwv-report-01.png)
+
+                ![Core Web Vitals Technology Report 02: Astro vorne](./src/media/cwv-report-02.png)
+                <!-- .element class="fragment" -->
+
+                ![Core Web Vitals Technology Report 03: Next.js App Router nur marginal besser](./src/media/cwv-report-03.png)
+                <!-- .element class="fragment" -->
+
+                ![Core Web Vitals Technology Report 04: Nuxt.js auch nur marginal besser](./src/media/cwv-report-04.png)
+                <!-- .element class="fragment" -->
+
+              </div>
+
+              [Core Web Vitals Technology Report (cwvtech.report)](https://lookerstudio.google.com/u/0/reporting/55bc8fad-44c2-4280-aa0b-5f3f0cd3d2be/page/M6ZPC?s=uwsf2UWxr6k&params=%7B%22df48%22:%22include%25EE%2580%25800%25EE%2580%2580IN%25EE%2580%2580React%22,%22df44%22:%22include%25EE%2580%25800%25EE%2580%2580IN%25EE%2580%2580ALL%25EE%2580%2580WordPress%25EE%2580%2580Next.js%25EE%2580%2580Ruby%2520on%2520Rails%25EE%2580%2580Laravel%25EE%2580%2580Next.js%2520App%2520Router%25EE%2580%2580Astro%22%7D)
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Case in point*: Pizza-Webseite
+
+              **Ziel**:
+              - Client-seitiges Rendern von Pizze aus [Supabase](https://supabase.com/)-Datenbank
+
+              **Variante 1**:
+              - [Next.js](https://nextjs.org/) (Pages Router)
+              - [Prisma Client](https://www.prisma.io/client)
+              - [SWR](https://nextjs.org/docs/pages/building-your-application/data-fetching/client-side#client-side-data-fetching-with-swr)
+              - [react-modal](https://www.npmjs.com/package/react-modal)
+
+              **Variante 2**:
+              - `node:http`
+              - `fetch`
+              - `<dialog />`
+
+              <aside class="notes">
+                - hype-driven development
+              </aside>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Resultat*: Performance
+
+              Ausgangslage:
+              - Messung via Chrome Developer Tools auf Desktop-Computer, Netzwerk throttled
+              - Situation auf einem Gerät mit weniger leistungsfähigem Prozessor: 🤷‍♂️
+
+              <br>
+
+              | Technologie   | Ausgelieferte Resourcen [kB] | `Finish`-Event mit `Fast 3G` [s] |
+              | ------------- | ---------------------------- | -------------------------------- |
+              | Next.js       | 292                          | 2.3                              |
+              | Plain         | 4.8                          | 1.8                              |
+              | _Unterschied_ | -98%                         | -20%                             |
+              <!-- .element class="fragment" -->
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Resultat*: Barrierefreiheit
+
+              Ausgangslage:
+              - Case Study hat ein einziges interaktives Element: Modal
+              - Auswahl: Library, welche sowohl bei Google als auch npm für `react modal` zuoberst gelistet wird
+
+              <br>
+
+              | Technologie | Ansatz für Modal      | Probleme                                                                                                  |
+              | ----------- | --------------------- | --------------------------------------------------------------------------------------------------------- |
+              | Next.js     | `react-modal` (48 KB) | Ignoriert grundlegende [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/) |
+              | Plain       | `<dialog />` (786 B)  | -                                                                                                         |
+              <!-- .element class="fragment" -->
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              ## Und diese sagenumwobene DX?
+
+              Als Entwickler:in
+              - kann ich UI bauen, ohne mich vertieft mit der Ziel-Plattform befassen zu müssen.
+              - kann ich beliebige externe Abhängigkeiten einführen.
+              - kann ich eine typisierte Umgebung nutzen, welche für die Plattform kompiliert wird.
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Problem 1:* Externe Abhängigkeiten lösen Probleme, welche die Plattform bereits gelöst hat (Client-Edition)
+
+              <div class="custom-columns">
+
+                ![Google-Suchresultate für "react modal"](./src/media/google-search-react-modal.png)
+
+                ![Google-Suchresultate für "react carousel"](./src/media/google-search-react-carousel.png)
+
+              </div>
+
+              - `<dialog />` bietet alles, was ein Modal-Dialog benötigt
+              - `CSS scroll snap` & `CSS scroll-driven animations` liefern die Basis für Komponenten wie Carousels
+              - `View Transition API` erlauben Animationen zwischen verschiedenen DOM-Zuständen (bald *cross-document*)
+              - `JavaScript modules` & `import maps` erlauben das Ausliefern von unkompilierten, nicht gebundelten Modulen
+              - `Custom elements` lösen u.a. das Problem der Instanzierung von Komponenten
+              - `CSS Cascade Layers` & `@scope` erweitern Möglichkeiten der Strukturierung und Anwendung von Styles
+              - `Shadow DOM` erlaubt _echte_ Style-Enkapsulierung
+              - Bald: `popover` und `CSS Anchor Positioning`
+              - ...
+
+              <!-- .element: class="custom-fragmented-list" -->
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Problem 1:* Externe Abhängigkeiten lösen Probleme, welche die Plattform bereits gelöst hat (Server-Edition)
+
+              - `node:test` & `node:assert` liefern die Grundlagen für Testing
+              - `--env-file` lädt `.env`-Dateien
+              - `--watch` startet den Prozess neu, wenn eine importierte Datei verändert wird
+              - Bald: [ESM in CommonJS importieren](https://joyeecheung.github.io/blog/2024/03/18/require-esm-in-node-js/index.html)
+              - Bald: [`fs.glob`](https://github.com/nodejs/node/pull/51912)
+              - ...
+
+              <!-- .element: class="custom-fragmented-list" -->
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Problem 2:* Es gibt eine komplette Entkoppelung zwischen unserem Code und jenem, den wir ausliefern.
+
+              - Der Fussabdruck meiner Abhängigkeiten wird verschleiert.
+              - Fussabdruck meiner Kompilier-Schritte wird verschleiert. Bsp. TypeScript-Empfehlung für `target`
+
+              <div class="custom-columns">
+
+                ![TypeScript-Doku: Modern browsers support all ES6 features, so ES6 is a good choice.](./src/media/typescript-es6.png)
+
+                ![TypeScript Playground: Kleine Klasse wird zu kompiliertem Ungetüm](./src/media/typescript-es6-result.png)
+
+              </div>
+
+              [TypeScript Playground](https://www.typescriptlang.org/play?target=2&module=0#code/MYGwhgzhAECyCeBhcVoG8BQ1vQMQEsIAZAezABN8A7Ac2gF5oAzMECAUwG4MsdJ4qwZuwAuwABYAKAJTpeOHCPGEAdAWJlKtBtBEAnAK5ceChcBJUII6ACMS5eDrAB3MPmtNREyQHIA9D7SKkrsVJJ67BAADhYcDAB80BHRsewqAFYQFjLS3PKmSqrqpBTUdIwsbMb5ChEiBnpUtvbw3AoAvhjtQA)
+              <!-- .element class="custom-footnote" -->
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Problem 3:* Unsere Build-Tools haben eine Komplexität erreicht, welche nicht mehr überschaubar ist.
+
+              | Technologie   | `node_modules` [MB] | Beispiele                        |
+              | ------------- | ------------------- | -------------------------------- |
+              | Next.js       | 414 (17'646 items)  | Webpack, SWC, Babel, TypeScript  |
+              | Plain         | 24 (237 items)      | TypeScript (Liste abschliessend) |
+              | _Unterschied_ | -95%                |                                  |
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Problem 4:* Unsere Build-Tools sind nicht stabil
+
+              Für SemVer-Profis: *Welches Update wird euch mehr Zeit kosten?*
+              1. TypeScript 4.9 → 5.0
+              2. TypeScript 5.0 → 5.1
+
+              <br>
+
+              <div class="fragment">
+
+                Who knows:
+                - TypeScript [verwendet kein SemVer](https://www.learningtypescript.com/articles/why-typescript-doesnt-follow-strict-semantic-versioning)
+                - Viele wissen das nicht:
+                ![TypeScript Versionsverteileung zeigt Peaks für 3.9 und 4.9](./src/media/typescript-semver.png) <!-- .element class="custom-image-small" -->
+                - <span style="display: block; clear: right"></span>Breaking Changes [sind die Regel](https://github.com/microsoft/TypeScript/wiki/Breaking-Changes)
+
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Problem 5:* Unsere Build-Tools haben eine beschränkte Lebensdauer
+
+              <div class="custom-columns">
+
+                ![Screenshot Webseite Turbopack](./src/media/bundler-turbopack.png)
+
+                ![Screenshot Webseite Vite](./src/media/bundler-vite.png)
+
+                ![Screenshot Webseite Vite](./src/media/bundler-rolldown.png)
+
+              </div>
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### *Problem 6:* Unsere Build-Tools halten sich nicht an Standards
+
+              - Beispiel: [Import Assertions](https://www.proposals.es/proposals/Import%20Assertions) vs. Bundlers
+              - Du möchtest deinen Code auf ein anderes Build-Tool migrieren?
+              ![Screenshot Webseite Vite](./src/media/steve-carrell-happy.webp) <!-- .element class="custom-image-small" -->
+
+              <!-- .element: class="custom-fragmented-list" -->
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              ## Vorschlag für bessere Definition von DX
+
+              Als Entwickler:in
+              - kann ich beim Onboarding einer neuen Entwicklerin den **Fokus auf Business-Logik** legen. Sowohl Build-Tools als auch externe Abhängigkeiten sind wenig komplex.
+              - verwende ich kaum Zeit mit dem **Unterhalt der Build-Tools**.
+              - kann ich das Projekt nach zwei Jahren aus der Schublade nehmen und es **baut** immer noch.
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### Wichtige Faktoren
+
+              1. Wie viele **Abstraktionsebenenen** existieren zwischen unserem Code und jenem, der an den Browser ausgeliefert wird?
+              2. Wie viele **externe Abhängigkeiten** hat unser Code? Wie gut ist deren Dokumentation und wie stabil sind sie?
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### 1. Wie viele *Abstraktionsebenenen* existieren zwischen unserem Code und jenem, der an den Browser ausgeliefert wird?
+
+              - Wenn wir kompilieren/transpilieren, sind wir beim Debugging auf **perfekte Sourcemaps** angewiesen
+              - Viele übliche Kompilier-/Transpilier-Schritte sind potenziell überflüssig:
+                - **Browser**: Module können geladen und ausgeführt werden
+                - **JSDoc**: Alternative TypeScript-Syntax via Annotationen
+              - Erstrebenswertes Ziel:
+                - Tooling vereinfachen → **weniger Unterhalt, weniger Sollbruchstellen**
+                - View Source = View Source
+            </script>
+          </section>
+          <section data-markdown>
+            <script type="text/template">
+              ### 2. Wie viele *externe Abhängigkeiten* hat unser Code? Wie gut ist deren Dokumentation und wie stabil sind sie?
+
+              Mögliche Kriterien:
+              - Grösse `node_modules`
+              - Direkte Dependencies: Wie viele **Major-Releases** in den letzten zwei Jahren?
+              - Umgang mit [Versionierung](https://nextjs.org/blog/next-14):
+                > As of v14, Next.js has upgraded to the latest React canary, which includes stable Server Actions.
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              ## Wie weiter?
+
+              - **Plattform, Plattform, Plattform**:
+                - Ein Grossteil unserer Weiterbildungszeit sollte damit verbracht werden, sich mit den Fähigkeiten und Herausforderungen der Plattformzu beschäftigen.
+              - **Weg von "Hype Driven Development"**:
+                - Die Social-Media-Reichweite eines VC-finanzierten Frameworks korreliert nicht mit dessen Qualität.
+                - Der JavaScript Industrial Complex hat keine Zeit für UX. Er muss neue Probleme generieren, für welche er morgen noch komplexere Lösungen präsentieren kann.
+                - Wir sollten Tools verwenden, welche _unsere_ Probleme lösen. Nicht jene von Meta oder Vercel.
+              - **Frontend-Entwicklung verdient mehr Anerkennung**:
+                - Qualitativ hochstehendes Frontend ist Voraussetzung für gute UX.
+                - Qualitativ hochstehendes Frontend ist anspruchsvoll.
+                - Qualitativ hochstehendes Frontend benötigt Ressourcen.
+              
+              <!-- .element: class="custom-fragmented-list" -->
+            </script>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <script type="text/template">
+              # Danke
+            </script>
+          </section>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>
